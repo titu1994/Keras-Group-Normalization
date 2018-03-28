@@ -6,6 +6,7 @@ from keras import backend as K
 
 from keras.utils.generic_utils import get_custom_objects
 
+
 class GroupNormalization(Layer):
     """Group normalization layer
 
@@ -20,7 +21,6 @@ class GroupNormalization(Layer):
             For instance, after a `Conv2D` layer with
             `data_format="channels_first"`,
             set `axis=1` in `BatchNormalization`.
-        momentum: Momentum for the moving mean and the moving variance.
         epsilon: Small float added to variance to avoid dividing by zero.
         center: If True, add offset of `beta` to normalized tensor.
             If False, `beta` is ignored.
@@ -31,8 +31,6 @@ class GroupNormalization(Layer):
             will be done by the next layer.
         beta_initializer: Initializer for the beta weight.
         gamma_initializer: Initializer for the gamma weight.
-        moving_mean_initializer: Initializer for the moving mean.
-        moving_variance_initializer: Initializer for the moving variance.
         beta_regularizer: Optional regularizer for the beta weight.
         gamma_regularizer: Optional regularizer for the gamma weight.
         beta_constraint: Optional constraint for the beta weight.
@@ -82,18 +80,18 @@ class GroupNormalization(Layer):
 
         if dim is None:
             raise ValueError('Axis ' + str(self.axis) + ' of '
-                             'input tensor should have a defined dimension '
-                             'but the layer received an input with shape ' +
+                                                        'input tensor should have a defined dimension '
+                                                        'but the layer received an input with shape ' +
                              str(input_shape) + '.')
 
         if dim < self.groups:
             raise ValueError('Number of groups (' + str(self.groups) + ') cannot be '
-                             'more than the number of channels (' +
+                                                                       'more than the number of channels (' +
                              str(dim) + ').')
 
         if dim % self.groups != 0:
             raise ValueError('Number of groups (' + str(self.groups) + ') must be a '
-                             'multiple of the number of channels (' +
+                                                                       'multiple of the number of channels (' +
                              str(dim) + ').')
 
         self.input_spec = InputSpec(ndim=len(input_shape),
