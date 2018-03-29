@@ -159,10 +159,10 @@ class GroupNormalization(Layer):
             outputs = inputs
 
             if self.scale:
-                outputs = outputs + self.beta
+                outputs = outputs * self.gamma
 
             if self.center:
-                outputs = outputs * self.gamma
+                outputs = outputs + self.beta
 
         return outputs
 
