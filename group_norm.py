@@ -132,15 +132,9 @@ class GroupNormalization(Layer):
         group_axes[self.axis] = input_shape[self.axis] // self.groups
         group_axes.insert(1, self.groups)
 
-        if self.axis != 0:
-            group_shape = [group_axes[0], self.groups] + group_axes[2:]
-        else:
-            # case where group normalization is done on the batch axis
-            group_shape = [group_axes[0], self.groups] + group_axes[2:]
-
-        # group_shape[self.axis + 1] = input_shape[self.axis] // self.groups
+        # reshape inputs to new group shape
+        group_shape = [group_axes[0], self.groups] + group_axes[2:]
         group_shape = K.stack(group_shape)
-        print(group_shape)
         inputs = K.reshape(inputs, group_shape)
 
         group_reduction_axes = list(range(len(group_axes)))
@@ -195,7 +189,7 @@ get_custom_objects().update({'GroupNormalization': GroupNormalization})
 if __name__ == '__main__':
     from keras.layers import Input
     from keras.models import Model
-    ip = Input(shape=(None, None, 2))
+    ip = Input(shape=(None, None, 4))
     #ip = Input(batch_shape=(100, None, None, 2))
     x = GroupNormalization(groups=2, axis=-1, epsilon=0.1)(ip)
     model = Model(ip, x)
